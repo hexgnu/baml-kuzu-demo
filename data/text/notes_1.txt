@@ -1,0 +1,13 @@
+Patient ID: X7F3Q
+Medication: Ramipril 5mg PO daily
+Side Effects: Patient reports persistent dry cough and occasional dizziness when standing. BP reduced from 156/92 to 132/78. No angioedema observed. Will continue to monitor for hypotension.
+
+
+Patient ID: B9P2T
+Medication: Lansoprazole 30mg PO daily before breakfast
+Side Effects: Patient experiencing mild constipation and occasional upset stomach. Reports significant improvement in heartburn and reflux symptoms. Advised to increase fluid intake and add more fiber to diet to manage constipation.
+
+
+Patient ID: L4D8Z
+Medication: Oxycontin 10mg PO q12h for chronic back pain
+Side Effects: Patient reports moderate drowsiness, dry mouth, and small rash on upper arms. Pain well-controlled at current dosage. Discussed proper hydration techniques for dry mouth. Will monitor rash at next visit. No signs of respiratory depression or dependence behaviors noted.
