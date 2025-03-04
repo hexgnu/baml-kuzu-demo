@@ -171,3 +171,5 @@ cython_debug/
 .pypirc
 # MacOS
 .DS_Store
+
+ex_kuzu_db
