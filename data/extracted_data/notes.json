@@ -1,0 +1,42 @@
+[
+    {
+        "patient_id": "X7F3Q",
+        "medication": {
+            "name": "Ramipril",
+            "date": "2024-10-12",
+            "dosage": "5mg",
+            "frequency": "daily"
+        },
+        "side_effects": [
+            "dry cough",
+            "dizziness"
+        ]
+    },
+    {
+        "patient_id": "B9P2T",
+        "medication": {
+            "name": "Lansoprazole",
+            "date": "2024-11-03",
+            "dosage": "30mg",
+            "frequency": "daily before breakfast"
+        },
+        "side_effects": [
+            "constipation",
+            "upset stomach"
+        ]
+    },
+    {
+        "patient_id": "L4D8Z",
+        "medication": {
+            "name": "Oxycontin",
+            "date": "2025-01-06",
+            "dosage": "10mg",
+            "frequency": "q12h"
+        },
+        "side_effects": [
+            "drowsiness",
+            "dry mouth",
+            "rash"
+        ]
+    }
+]
