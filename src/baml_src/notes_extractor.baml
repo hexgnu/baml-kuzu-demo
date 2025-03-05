@@ -13,7 +13,7 @@ class PatientInfo {
 }
 
 function ExtractMedicationInfo(notes: string) -> PatientInfo[] {
-  client GTP4oMiniExtract
+  client OpenRouterGPT4oMini
   prompt #"
     Extract the medication information from the following nurse's notes.
     Include only documented side effects, not vital signs or observations.

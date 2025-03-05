@@ -1,5 +1,5 @@
 import streamlit as st
-from run_graph_rag import GraphRAG
+from run_graphrag import GraphRAG
 
 # Set page configuration
 st.set_page_config(

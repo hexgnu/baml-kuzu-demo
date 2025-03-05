@@ -1,13 +1,13 @@
 # Graph extraction and Graph RAG with BAML and Kuzu
 
 This repository contains a demonstration of transforming unstructured data from clinical notes
-and drug side effects in to a knowledge graph. The graph is then used to answer questions
+and drug side effects into a knowledge graph in Kuzu. The graph is then used to answer questions
 about the data using a Graph RAG pipeline.
 
 Tools used
-- BAML: AI and LLM prompting framework
-- Kuzu: Embedded, fast, scalable graph database
-- Streamlit: Visualization framework for building custom web apps
+- [BAML](https://github.com/boundaryml/baml): AI and LLM prompting framework
+- [Kuzu](https://github.com/kuzudb/kuzu): Embedded, fast, scalable graph database
+- [Streamlit](https://github.com/streamlit/streamlit): Visualization framework for building custom web apps
 
 ## Overview
 
@@ -23,14 +23,9 @@ The general components of the pipeline are shown in the diagram below.
 
 ![](./assets/drug-side-effects-graph-rag.png)
 
-## Requirements
+## Setup
 
-- Python 3.11+
-- [Kuzu](https://github.com/kuzudb/kuzu) graph database
-- [BAML](https://github.com/boundaryml/baml) AI and LLM prompting framework
-- [Streamlit](https://github.com/streamlit/streamlit) visualization framework
-
-## Installation
+Ensure you have Python 3.11+ installed.
 
 1. Clone this repository
 2. Install the required dependencies:
@@ -48,29 +43,29 @@ To extract data from images and text, run the following command:
 ```bash
 cd src
 # Extract data from images that represent tables from the PDF of drugs and side effects
-python image_extractor.py
+uv run image_extractor.py
 # Extract data from the text of clinical notes
-python notes_extractor.py
+uv run notes_extractor.py
 ```
 
-This will output JSON files into the `./data/extracted_data` directory.
+This will output JSON files into the `../data/extracted_data` directory.
 
 ## Creating the graph
 
-To create the graph, run the following command:
+To create the graph in Kuzu, run the following command:
 
 ```bash
 cd src
-python 01_create_drug_graph.py
+uv run 01_create_drug_graph.py
 ```
 
-This will create the graph in the `./ex_kuzu_db` directory.
+This will persist the Kuzu graph locally in the `ex_kuzu_db` directory.
 
 To add the patient data to the graph, run the following command:
 
 ```bash
 cd src
-python 02_create_patient_graph.py
+uv run 02_create_patient_graph.py
 ```
 This will augment the pre-existing graph (from the prior step) with the data from the
 patient notes.
@@ -81,7 +76,7 @@ To run the Streamlit application:
 
 ```bash
 cd src
-streamlit run streamlit_app.py
+uv run streamlit run streamlit_app.py
 ```
 
 The application will be available at http://localhost:8501 by default.
@@ -89,7 +84,6 @@ The application will be available at http://localhost:8501 by default.
 ## Sample questions
 
 The application comes with several sample questions you can try:
-- "What side effects did patient X7F3Q experience?"
 - "What drug brands are there for lansoprazole?"
 - "What are the side effects of morphine?"
 
