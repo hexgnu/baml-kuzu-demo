@@ -42,7 +42,7 @@ function RAGText2Cypher(schema: string, question: string) -> Query | null {
 }
 
 function RAGAnswerQuestion(context: Answer) -> Answer {
-  client GTP4oMiniGenerate
+  client Gemini2Flash
   prompt #"
     Answer the question in full sentences using the provided context.
     Do not make up an answer. If the information is not provided in the context, say so clearly.

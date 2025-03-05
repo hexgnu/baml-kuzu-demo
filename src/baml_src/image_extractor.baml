@@ -13,12 +13,13 @@ class ConditionAndDrug {
 }
 
 function ExtractFromImage(img: image) -> ConditionAndDrug[] {
-  client OpenRouterClaude35Sonnet
+  client GTP4oMiniExtract
   prompt #"
     Extract the condition, drug names and side effects from the provided table with these columns:
     - Reason for drug
     - Drug names: Generic name & (Brand name)
     - Side effects
+
 
     {{ ctx.output_format }}
 
