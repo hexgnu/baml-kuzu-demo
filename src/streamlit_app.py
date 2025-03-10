@@ -17,10 +17,10 @@ def process_question(question):
     with st.spinner("Generating answer..."):
         try:
             # Call the Graph RAG run method with a single question
-            rag_result = rag.run([question])
+            rag_result = rag.run(question)
             
             if rag_result and len(rag_result) > 0:
-                result = rag_result[0]  # Get the first result
+                result = rag_result # Get the first result
                 
                 # Add to chat history (most recent first)
                 st.session_state.chat_history.insert(0, result)
@@ -96,10 +96,13 @@ if st.session_state.chat_history:
     
     # Display the answer (full width)
     st.subheader("Answer")
-    if latest['answer'] != "N/A":
-        st.markdown(latest['answer'])
+    if isinstance(latest, dict) and 'response' in latest:
+        if latest['response'] != "N/A":
+            st.markdown(latest['response'])
+        else:
+            st.warning("No answer was generated. This could be due to no results from the query or an error in processing.")
     else:
-        st.warning("No answer was generated. This could be due to no results from the query or an error in processing.")
+        st.error("Unexpected result format. Please check the structure of the response.")
     
     # Divider
     st.divider()
@@ -119,8 +122,8 @@ if len(st.session_state.chat_history) > 1:
                 st.error("No Cypher query was generated.")
             
             st.markdown("**Answer:**")
-            if item['answer'] != "N/A":
-                st.markdown(item['answer'])
+            if item['response'] != "N/A":
+                st.markdown(item['response'])
             else:
                 st.warning("No answer was generated.")
 
