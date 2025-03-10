@@ -40,8 +40,11 @@ class Answer(BaseModel):
 
 class ConditionAndDrug(BaseModel):
     condition: Optional[str] = None
-    drug: List["types.Drug"]
+    drug: List["Drug"]
     side_effects: List[str]
+
+class Cypher(BaseModel):
+    query: Optional[str] = None
 
 class Drug(BaseModel):
     generic_name: Optional[str] = None
@@ -57,6 +60,3 @@ class PatientInfo(BaseModel):
     patient_id: Optional[str] = None
     medication: Optional["Medication"] = None
     side_effects: List[str]
-
-class Query(BaseModel):
-    query: Optional[str] = None

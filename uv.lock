@@ -79,7 +79,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "baml-py", specifier = ">=0.77.0" },
+    { name = "baml-py", specifier = ">=0.78.0" },
     { name = "kuzu", specifier = ">=0.8.2" },
     { name = "polars", specifier = ">=1.23.0" },
     { name = "pyarrow", specifier = ">=19.0.1" },

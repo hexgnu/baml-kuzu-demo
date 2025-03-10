@@ -1,5 +1,5 @@
 // --- Data models ---
-class Query {
+class Cypher {
   query string
 }
 
@@ -10,7 +10,7 @@ class Answer {
 
 // --- Functions ---
 
-function RAGText2Cypher(schema: string, question: string) -> Query | null {
+function RAGText2Cypher(schema: string, question: string) -> Cypher {
   client Gemini2Flash
   prompt #"
     You are an expert in translating natural language questions into Cypher statements.
@@ -41,15 +41,19 @@ function RAGText2Cypher(schema: string, question: string) -> Query | null {
   "#
 }
 
-function RAGAnswerQuestion(context: Answer) -> Answer {
-  client Gemini2Flash
+function RAGAnswerQuestion(question: string, context: string) -> Answer {
+  client OpenRouterGPT4oMiniGenerate
   prompt #"
-    Answer the question in full sentences using the provided context.
-    Do not make up an answer. If the information is not provided in the context, say so clearly.
+    You are an AI assistant using Retrieval-Augmented Generation (RAG).
+    RAG enhances your responses by retrieving relevant information from a knowledge base.
+    You will be provided with a question and relevant context. Use only this context to answer
+    the question IN FULL SENTENCES.
+    Do not make up an answer. If you don't know the answer, say so clearly.
+    Always strive to provide concise, helpful, and context-aware answers.
 
     {{ _.role("user") }}
-    QUESTION: {{ context.question }}
-    RELEVANT CONTEXT: {{ context.answer }}
+    QUESTION: {{ question }}
+    RELEVANT CONTEXT: {{ context }}
 
     {{ ctx.output_format }}
 
@@ -143,29 +147,23 @@ test CypherDrugGenericHasBrand {
 test GenerationDrugCausesSymptom {
   functions [RAGAnswerQuestion]
   args {
-    context {
-      question "What are the side effects of Morphine? Answer in a numbered list.",
-      answer "{s.name: 'Morphine', side_effects: ['rash', 'queasiness', 'dry mouth', 'drowsiness', 'throwing up', 'constipation', 'dizziness', 'confusion']}"
-    }
+    question "What are the side effects of Morphine? Answer in a numbered list.",
+    context "{'s.name': 'Morphine', 's.side_effects': ['rash', 'queasiness', 'dry mouth', 'drowsiness', 'throwing up', 'constipation', 'dizziness', 'confusion']}"
   }
 }
 
 test GenerationDrugGenericHasBrand {
   functions [RAGAnswerQuestion]
   args {
-    context {
-      question "What drug brands are there for Lansoprazole?",
-      answer "{s.name: 'Lansoprazole', brand_names: ['Prevacid']}"
-    }
+    question "What drug brands are there for Lansoprazole?",
+    context "{'s.name': 'Lansoprazole', 's.brand_names': ['Prevacid']}"
   }
 }
 
 test GenerationMissingContext {
   functions [RAGAnswerQuestion]
   args {
-    context {
-      question "Can you tell me the side effects of Metformin?",
-      answer ""
-    }
+    question "Can you tell me the side effects of Metformin?",
+    context ""
   }
 }

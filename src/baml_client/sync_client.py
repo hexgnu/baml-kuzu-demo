@@ -102,7 +102,7 @@ class BamlSyncClient:
     
     def RAGAnswerQuestion(
         self,
-        context: types.Answer,
+        question: str,context: str,
         baml_options: BamlCallOptions = {},
     ) -> types.Answer:
       __tb__ = baml_options.get("tb", None)
@@ -117,7 +117,7 @@ class BamlSyncClient:
       raw = self.__runtime.call_function_sync(
         "RAGAnswerQuestion",
         {
-          "context": context,
+          "question": question,"context": context,
         },
         self.__ctx_manager.get(),
         tb,
@@ -130,7 +130,7 @@ class BamlSyncClient:
         self,
         schema: str,question: str,
         baml_options: BamlCallOptions = {},
-    ) -> Union[types.Query, Optional[None]]:
+    ) -> types.Cypher:
       __tb__ = baml_options.get("tb", None)
       if __tb__ is not None:
         tb = __tb__._tb # type: ignore (we know how to use this private attribute)
@@ -150,7 +150,7 @@ class BamlSyncClient:
         __cr__,
         collectors,
       )
-      return cast(Union[types.Query, Optional[None]], raw.cast_to(types, types, partial_types, False))
+      return cast(types.Cypher, raw.cast_to(types, types, partial_types, False))
     
 
 
@@ -232,7 +232,7 @@ class BamlStreamClient:
     
     def RAGAnswerQuestion(
         self,
-        context: types.Answer,
+        question: str,context: str,
         baml_options: BamlCallOptions = {},
     ) -> baml_py.BamlSyncStream[partial_types.Answer, types.Answer]:
       __tb__ = baml_options.get("tb", None)
@@ -247,6 +247,7 @@ class BamlStreamClient:
       raw = self.__runtime.stream_function_sync(
         "RAGAnswerQuestion",
         {
+          "question": question,
           "context": context,
         },
         None,
@@ -267,7 +268,7 @@ class BamlStreamClient:
         self,
         schema: str,question: str,
         baml_options: BamlCallOptions = {},
-    ) -> baml_py.BamlSyncStream[Optional[Union[partial_types.Query, Optional[None]]], Union[types.Query, Optional[None]]]:
+    ) -> baml_py.BamlSyncStream[partial_types.Cypher, types.Cypher]:
       __tb__ = baml_options.get("tb", None)
       if __tb__ is not None:
         tb = __tb__._tb # type: ignore (we know how to use this private attribute)
@@ -290,10 +291,10 @@ class BamlStreamClient:
         collectors,
       )
 
-      return baml_py.BamlSyncStream[Optional[Union[partial_types.Query, Optional[None]]], Union[types.Query, Optional[None]]](
+      return baml_py.BamlSyncStream[partial_types.Cypher, types.Cypher](
         raw,
-        lambda x: cast(Optional[Union[partial_types.Query, Optional[None]]], x.cast_to(types, types, partial_types, True)),
-        lambda x: cast(Union[types.Query, Optional[None]], x.cast_to(types, types, partial_types, False)),
+        lambda x: cast(partial_types.Cypher, x.cast_to(types, types, partial_types, True)),
+        lambda x: cast(types.Cypher, x.cast_to(types, types, partial_types, False)),
         self.__ctx_manager.get(),
       )
     
