@@ -49,6 +49,9 @@ class ConditionAndDrug(BaseModel):
     drug: List["Drug"]
     side_effects: List[str]
 
+class Cypher(BaseModel):
+    query: str
+
 class Drug(BaseModel):
     generic_name: str
     brand_names: List[str]
@@ -63,6 +66,3 @@ class PatientInfo(BaseModel):
     patient_id: str
     medication: "Medication"
     side_effects: List[str]
-
-class Query(BaseModel):
-    query: str

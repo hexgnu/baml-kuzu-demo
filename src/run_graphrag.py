@@ -1,7 +1,5 @@
-from pprint import pprint
 import kuzu
-from baml_client import b
-from baml_client.types import Answer
+from baml_client import b, types
 
 
 def get_schema_dict(conn: kuzu.Connection) -> dict[str, list[dict]]:
@@ -70,7 +68,7 @@ class GraphRAG:
         self.conn = kuzu.Connection(self.db)
         self.baml_schema = get_schema_baml(self.conn)
 
-    def execute_query(self, question: str, cypher: str) -> Answer:
+    def execute_query(self, question: str, cypher: str) -> types.Answer:
         """Use the generated Cypher statement to query the graph database."""
         response = self.conn.execute(cypher)
         result = []
@@ -81,43 +79,36 @@ class GraphRAG:
 
         # Create a context object that RAGAnswerQuestion can use
         result_list = [x for i, x in enumerate(result) if x not in result[:i]]
+        result_str = ", ".join(result_list)
         # Return the result as an Answer object
-        return Answer(question=question, answer=str(result_list))
-        
-    def run(self, questions=None):
-        if questions is None:
-            # Default questions will be defined in the main block
-            questions = []
-            
-        results = []
-        for question in questions:
-            output = b.RAGText2Cypher(self.baml_schema, question)
-            
-            result = {
-                "cypher": output.query if output else "N/A",
-                "question": question,
-                "answer": "N/A"
-            }
-            # Query the database
-            if output:
-                cypher = output.query
-                context = self.execute_query(question, cypher)
-                res = b.RAGAnswerQuestion(context)
-                result["answer"] = res.answer
-            print("---")
-            pprint(result)
-            # Append the result to the results list
-            results.append(result)
-        
-        return results
+        return types.Answer(question=question, answer=result_str)
+
+    def run(self, question: str) -> dict[str, str]:
+        cypher = b.RAGText2Cypher(self.baml_schema, question)
+
+        result = {
+            "question": question,
+            "cypher": cypher.query if cypher else "N/A",
+            "response": "N/A",
+        }
+        # Query the database
+        if cypher:
+            query_response = self.execute_query(question, cypher.query)
+            r = b.RAGAnswerQuestion(question, query_response.answer)
+            # Overwrite answer with the answer from the RAGAnswerQuestion function
+            result["response"] = r.answer
+
+        return result
 
 
 if __name__ == "__main__":
     questions = [
         "What drug brands are there for lansoprazole?",
-        # "What are the side effects of lansoprazole?",
+        "What are the side effects of morphine?",
     ]
 
-    rag = GraphRAG()
-    results = rag.run(questions)
+    rag = GraphRAG("ex_kuzu_db")
+    for question in questions:
+        results = rag.run(question)
+        print(results)
 

@@ -44,7 +44,7 @@ test TestNegation {
     notes #"
       Patient ID: L9M2W
       Medication: Metformin 1000mg BID
-      Side Effects: Reports mild nausea after morning dose. Denies diarrhea. Blood sugar levels stable.
+      Side Effects: Reports mild nausea after morning dose. Denies has diarrhea. Blood sugar levels stable.
     "#
   }
 }

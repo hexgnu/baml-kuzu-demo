@@ -2,8 +2,6 @@
 class Drug {
     generic_name string
     brand_names string[]  @description("No special characters, only alphanumeric")
-    // This entire item will only stream when complete
-    @@stream.done
 }
 
 class ConditionAndDrug {
@@ -13,13 +11,12 @@ class ConditionAndDrug {
 }
 
 function ExtractFromImage(img: image) -> ConditionAndDrug[] {
-  client GTP4oMiniExtract
+  client OpenRouterGPT4oMini
   prompt #"
     Extract the condition, drug names and side effects from the provided table with these columns:
     - Reason for drug
     - Drug names: Generic name & (Brand name)
     - Side effects
-
 
     {{ ctx.output_format }}
 
