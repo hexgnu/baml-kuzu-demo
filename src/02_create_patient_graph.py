@@ -2,6 +2,7 @@
 This script is written to be run sequentially after 01_create_drug_graph.py
 Do not run this script before running 01_create_drug_graph.py
 """
+
 import kuzu
 import polars as pl
 
@@ -14,9 +15,9 @@ def load_and_transform_data(file_path: str) -> pl.DataFrame:
         pl.col("medication").struct.field("name").str.to_lowercase().alias("drug_name"),
         pl.col("medication").struct.field("date").str.to_date(format="%Y-%m-%d").alias("date"),
         pl.col("medication").struct.field("dosage").alias("dosage"),
-        pl.col("medication").struct.field("frequency").alias("frequency")
+        pl.col("medication").struct.field("frequency").alias("frequency"),
     )
-    
+
     return df_mod
 
 
@@ -84,22 +85,19 @@ def main():
     # Connect to the database
     db = kuzu.Database("ex_kuzu_db")
     conn = kuzu.Connection(db)
-    
+
     # Load and transform data
     df = load_and_transform_data("../data/extracted_data/notes.json")
     # Create schema
     create_schema(conn)
-    
+
     # Merge data and get counts
     merge_patient_nodes(conn, df.select("patient_id"))
-    merge_prescription_rels(conn, df.select("patient_id", "drug_name", "date", "dosage", "frequency"))
+    merge_prescription_rels(
+        conn, df.select("patient_id", "drug_name", "date", "dosage", "frequency")
+    )
     merge_symptom_rels(conn, df.select("patient_id", "side_effects").explode("side_effects"))
-    
+
+
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
