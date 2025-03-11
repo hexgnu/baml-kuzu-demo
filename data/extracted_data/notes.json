@@ -18,7 +18,7 @@
             "name": "Lansoprazole",
             "date": "2024-11-03",
             "dosage": "30mg",
-            "frequency": "daily before breakfast"
+            "frequency": "daily"
         },
         "side_effects": [
             "constipation",
@@ -37,6 +37,18 @@
             "drowsiness",
             "dry mouth",
             "rash"
+        ]
+    },
+    {
+        "patient_id": "L9M2W",
+        "medication": {
+            "name": "Metformin",
+            "date": "2024-11-03",
+            "dosage": "1000mg",
+            "frequency": "BID"
+        },
+        "side_effects": [
+            "nausea"
         ]
     }
 ]
