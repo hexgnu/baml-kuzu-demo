@@ -1,4 +1,5 @@
 import kuzu
+
 from baml_client import b, types
 
 
@@ -31,6 +32,7 @@ def get_schema_dict(conn: kuzu.Connection) -> dict[str, list[dict]]:
         schema["edges"].append(edge)
 
     return schema
+
 
 def get_schema_baml(conn: kuzu.Connection) -> str:
     schema = get_schema_dict(conn)
@@ -111,4 +113,3 @@ if __name__ == "__main__":
     for question in questions:
         results = rag.run(question)
         print(results)
-

@@ -7,10 +7,7 @@ import polars as pl
 
 
 def process_condition_column(
-    df: pl.DataFrame,
-    column: str,
-    separators: List[str] = [" or ", "/"],
-    strip: bool = True
+    df: pl.DataFrame, column: str, separators: List[str] = [" or ", "/"], strip: bool = True
 ) -> pl.DataFrame:
     """
     Explode the condition column with multiple separators into multiple rows.
@@ -20,49 +17,33 @@ def process_condition_column(
 
     # Create expression for the initial transformation
     expr = pl.col(column).str.to_lowercase()
-    
+
     # First transformation
     result = result.with_columns(expr.alias(column))
-    
+
     # Process each separator with separate explode operations
     for separator in separators:
-        result = result.with_columns(
-            pl.col(column).str.split(separator)
-        ).explode(column)
-    
+        result = result.with_columns(pl.col(column).str.split(separator)).explode(column)
+
     # Add stripping if needed
     if strip:
-        result = result.with_columns(
-            pl.col(column).str.strip_chars()
-        )
-    
+        result = result.with_columns(pl.col(column).str.strip_chars())
+
     return result
 
 
 def create_node_tables(conn: kuzu.Connection) -> None:
     # Create drug and side effects graph
-    conn.execute(
-        """CREATE NODE TABLE IF NOT EXISTS DrugGeneric (name STRING PRIMARY KEY)"""
-    )
-    conn.execute(
-        """CREATE NODE TABLE IF NOT EXISTS DrugBrand (name STRING PRIMARY KEY)"""
-    )
+    conn.execute("""CREATE NODE TABLE IF NOT EXISTS DrugGeneric (name STRING PRIMARY KEY)""")
+    conn.execute("""CREATE NODE TABLE IF NOT EXISTS DrugBrand (name STRING PRIMARY KEY)""")
     conn.execute("""CREATE NODE TABLE IF NOT EXISTS Symptom (name STRING PRIMARY KEY)""")
-    conn.execute(
-        """CREATE NODE TABLE IF NOT EXISTS Condition (name STRING PRIMARY KEY)"""
-    )
+    conn.execute("""CREATE NODE TABLE IF NOT EXISTS Condition (name STRING PRIMARY KEY)""")
 
 
 def create_rel_tables(conn) -> None:
-    conn.execute(
-        """CREATE REL TABLE IF NOT EXISTS CAN_CAUSE (FROM DrugGeneric TO Symptom)"""
-    )
-    conn.execute(
-        """CREATE REL TABLE IF NOT EXISTS HAS_BRAND (FROM DrugGeneric TO DrugBrand)"""
-    )
-    conn.execute(
-        """CREATE REL TABLE IF NOT EXISTS IS_TREATED_BY (FROM Condition TO DrugGeneric)"""
-    )
+    conn.execute("""CREATE REL TABLE IF NOT EXISTS CAN_CAUSE (FROM DrugGeneric TO Symptom)""")
+    conn.execute("""CREATE REL TABLE IF NOT EXISTS HAS_BRAND (FROM DrugGeneric TO DrugBrand)""")
+    conn.execute("""CREATE REL TABLE IF NOT EXISTS IS_TREATED_BY (FROM Condition TO DrugGeneric)""")
 
 
 def merge_condition_nodes(df, conn) -> None:
@@ -94,10 +75,7 @@ def merge_generic_drug_nodes(df, conn) -> None:
     generic_drugs_df = (
         df.explode("drug")
         .select(
-            pl.col("drug")
-            .struct.field("generic_name")
-            .str.to_lowercase()
-            .alias("generic_names")
+            pl.col("drug").struct.field("generic_name").str.to_lowercase().alias("generic_names")
         )
         .unique()
     )
@@ -157,21 +135,19 @@ def merge_condition_generic_drug_rel(df, conn) -> None:
 def merge_generic_drug_brand_rel(df, conn) -> None:
     # Merge generic drug and brand drug relationships
     # First, create a dataframe with exploded drugs and processed conditions
-    df_with_drugs = (
-        df.explode("drug")
-        .with_columns([
+    df_with_drugs = df.explode("drug").with_columns(
+        [
             pl.col("drug").struct.field("generic_name").str.to_lowercase().alias("generic_name"),
             pl.col("drug").struct.field("brand_names").alias("brand_names"),
-            pl.col("condition").str.to_lowercase().str.strip_chars().alias("condition")
-        ])
+            pl.col("condition").str.to_lowercase().str.strip_chars().alias("condition"),
+        ]
     )
 
     df_with_conditions = df_with_drugs.select(["generic_name", "brand_names", "condition"])
 
     # Finally, explode brand names and create the final dataframe
     generic_drug_brand_df = (
-        df_with_conditions
-        .explode("brand_names")
+        df_with_conditions.explode("brand_names")
         .filter(pl.col("brand_names") != "")  # Filter out empty brand names
         .with_columns(pl.col("brand_names").str.to_lowercase().alias("brand_name"))
         .select(["generic_name", "brand_name", "condition"])

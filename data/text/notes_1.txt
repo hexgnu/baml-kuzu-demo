@@ -14,3 +14,9 @@ Patient ID: L4D8Z
 Date: Jan 6 2025
 Medication: Oxycontin 10mg PO q12h for chronic back pain
 Side Effects: Patient reports moderate drowsiness, dry mouth, and small rash on upper arms. Pain well-controlled at current dosage. Discussed proper hydration techniques for dry mouth. Will monitor rash at next visit. No signs of respiratory depression or dependence behaviors noted.
+
+
+Patient ID: L9M2W
+Date: Nov 3 2024
+Medication: Metformin 1000mg BID
+Side Effects: Reports mild nausea after morning dose. Denies diarrhea. Blood sugar levels stable.
