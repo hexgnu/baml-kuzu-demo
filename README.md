@@ -110,3 +110,111 @@ The application comes with several sample questions you can try:
 > custom modules can be incorporated downstream of Text2Cypher to check the Cypher queries
 > for syntax errors before execution. In addition, corrector agents could be added to the
 > pipeline to increase robustness so that fewer questions result in an empty response.
+
+---
+
+## Evaluation
+
+Part of the motivation for this project was to evaluate the performance of BAML and the given
+LLM for the task of extracting data from unstructured text. We have two tasks to evaluate:
+
+1. Extracting drugs and side effects from a table in a PDF
+2. Extracting medications and side effects from clinical notes
+
+To evaluate the performance of the image extractor, run the following command:
+
+```bash
+uv run evals/image_extractor_eval.py
+```
+
+To evaluate the performance of the notes extractor, run the following command:
+
+```bash
+uv run evals/notes_extractor_eval.py
+```
+
+### Image extractor results
+
+The results from multiple models being compared are shown below. Cost numbers (from the OpenRouter API),
+where possible, are also noted for each model, alongside the percentage of relevant matches found
+between the human annotated data and the extracted data.
+
+| **File: `drugs_1.json`** | **Count** | **Percentage** |
+|------------------------|-----------|----------------|
+| Exact matches          | 79        | 100.0%         |
+| Missing items          | 0         | 0.0%           |
+| Potential hallucinations | 0       | 0.0%           |
+
+| **File: `drugs_2.json`** | **Count** | **Percentage** |
+|------------------------|-----------|----------------|
+| Exact matches          | 97        | 89.8%          |
+| Missing items          | 2         | 1.9%           |
+| Potential hallucinations | 9       | 8.3%           |
+
+| **Totals across all files** | **Count** | **Percentage** |
+|----------------------------|-----------|----------------|
+| Total exact matches        | 176       | 94.1%          |
+| Total missing items        | 2         | 1.1%           |
+| Total potential hallucinations | 9     | 4.8%           |
+
+In the case of `gpt-4o-mini`, the model is really good at memorizing data from its training,
+so not all the potential hallucinations are actually hallucinations. See below for the cases
+where the evaluation thinks the model may have hallucinated:
+
+```
+File: drugs_2.json
+  Potentially hallucinated items in extracted data (please verify):
+    <Missing> (human annotated) --- 'Accupril' (extracted)
+    <Missing> (human annotated) --- 'Altace' (extracted)
+    <Missing> (human annotated) --- 'Capoten' (extracted)
+    <Missing> (human annotated) --- 'Lotensin' (extracted)
+    <Missing> (human annotated) --- 'Prinivil' (extracted)
+    <Missing> (human annotated) --- 'Trimethoprim' (extracted)
+    <Missing> (human annotated) --- 'Vasotec' (extracted)
+    <Missing> (human annotated) --- 'Zestril' (extracted)
+```
+In `drugs_2.json`, the model produced the brands `Accupril`, `Altace`, `Capoten`, `Lotensin`, and so on.
+In ALL cases (100% of the time, over 10 runs), the model identified the **correct** drug
+brands even though they were not present in the image file, because the model effectively memorized
+the data from its training. From a business perspective, the model is correct, and a human
+would mark these as correct extractions, not hallucinations.
+
+However, the model is not perfect, and in the case of `gpt-4o-mini`, it missed the following extractions
+with very minor errors:
+
+```
+File: drugs_2.json
+  Mismatched items (different values for corresponding elements):
+    'Cozarr' (human annotated) --- 'Cozar' (extracted)
+  Items missing from extracted data:
+    'Sulfamethoxazole/Trimethoprim' (human annotated) --- 'Trimethoprim' (extracted)
+```
+
+These mismatches, though minor, would need to be fixed by a human in the loop.
+
+### Notes extractor results
+
+The results from the notes extractor are shown below.
+
+| **Totals across all notes files** | **Count** | **Percentage** |
+|-----------------------------------|-----------|----------------|
+| Total exact matches               | 19        | 100.0%         |
+| Total missing items               | 0         | 0.0%           |
+| Total potential hallucinations    | 0         | 0.0%           |
+| Total mismatches                  | 0         | 0.0%           |
+
+There are no hallucinations or mismatches in the notes extractor!
+
+## Evaluation results for multiple models
+
+Over time, the performance of more models can be easily and efficiently tested with BAML. The total number of
+exact matches (for the exact same prompt) are aggregated and shown below.
+Cost numbers are as obtained from the OpenRouter API on average across 3 runs.
+
+| **Model** | **Image extractor** | **Notes extractor** | **Total cost**
+| --- | --- | --- | --- |
+| gpt-4o-mini | 176 | 19 | $0.000075 |
+| claude-3-5-sonnet | 164 | 19 | $0.0037 |
+
+To do: Add a better summary table comparing more models (both open source and commercial).
+
