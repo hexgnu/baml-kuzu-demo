@@ -61,6 +61,9 @@ def merge_prescription_rels(conn: kuzu.Connection, df: pl.DataFrame) -> None:
         LOAD FROM df
         MATCH (p:Patient {patient_id: patient_id}), (d:DrugGeneric {name: drug_name})
         MERGE (p)-[r:IS_PRESCRIBED]->(d)
+           SET r.date = date,
+               r.dosage = dosage,
+               r.frequency = frequency
         RETURN COUNT(r) AS merged_count
         """
     )

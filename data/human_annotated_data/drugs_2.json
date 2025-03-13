@@ -36,7 +36,7 @@
             {
                 "generic_name": "Diltiazem",
                 "brand_names": [
-                    "Cardizem",
+                    "Cardizem CD",
                     "Cartia XT",
                     "Tiazac",
                     "Dilacor XR"
@@ -126,7 +126,7 @@
             {
                 "generic_name": "Losartan",
                 "brand_names": [
-                    "Cozarr"
+                    "Cozar"
                 ]
             },
             {
@@ -160,13 +160,10 @@
                 ]
             },
             {
-                "generic_name": "Co-Trimoxazole",
-                "brand_names": []
-            },
-            {
-                "generic_name": "Sulfamethoxazole/Trimethoprim",
+                "generic_name": "Co-Trimoxazole, Sulfamethoxazole/Trimethoprim",
                 "brand_names": [
                     "Bactrim",
+                    "Bactrim DS",
                     "Septra",
                     "Septra DS"
                 ]

@@ -1,7 +1,7 @@
 // Extract drug information and its known side effects from a table in an image
 class Drug {
     generic_name string
-    brand_names string[]  @description("No special characters, only alphanumeric")
+    brand_names string[] @description("Strip the ® character at the end of the brand names")
 }
 
 class ConditionAndDrug {
@@ -13,7 +13,9 @@ class ConditionAndDrug {
 function ExtractFromImage(img: image) -> ConditionAndDrug[] {
   client OpenRouterGPT4oMini
   prompt #"
-    Extract the condition, drug names and side effects from the provided table with these columns:
+    You are an expert at extracting healthcare and pharmaceutical information.
+
+    Extract the condition, drug names and side effects from these columns:
     - Reason for drug
     - Drug names: Generic name & (Brand name)
     - Side effects

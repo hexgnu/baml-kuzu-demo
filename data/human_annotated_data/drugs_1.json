@@ -34,9 +34,7 @@
             },
             {
                 "generic_name": "Oxycodone",
-                "brand_names": [
-                    "Oxycontin"
-                ]
+                "brand_names": []
             },
             {
                 "generic_name": "Tramadol",
@@ -182,7 +180,7 @@
         "condition": "Blood Thinner/Blood Clot Treatment",
         "drug": [
             {
-                "generic_name": "Apixaben",
+                "generic_name": "Apixaban",
                 "brand_names": [
                     "Eliquis"
                 ]
