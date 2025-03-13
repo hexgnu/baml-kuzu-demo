@@ -12,7 +12,7 @@
             {
                 "generic_name": "Digoxin",
                 "brand_names": [
-                    "Digitek",
+                    "Digitex",
                     "Lanoxin"
                 ]
             },
@@ -141,20 +141,6 @@
                 "brand_names": [
                     "Cozar"
                 ]
-            },
-            {
-                "generic_name": "Furosemide",
-                "brand_names": [
-                    "Lasix"
-                ]
-            },
-            {
-                "generic_name": "Hydrochlorothiazide",
-                "brand_names": []
-            },
-            {
-                "generic_name": "Spironolactone",
-                "brand_names": []
             }
         ],
         "side_effects": [
@@ -180,6 +166,7 @@
                 "generic_name": "Trimethoprim",
                 "brand_names": [
                     "Bactrim",
+                    "Bactrim DS",
                     "Septra",
                     "Septra DS"
                 ]

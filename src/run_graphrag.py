@@ -74,8 +74,8 @@ class GraphRAG:
         """Use the generated Cypher statement to query the graph database."""
         response = self.conn.execute(cypher)
         result = []
-        while response.has_next():
-            item = response.get_next()
+        while response.has_next():  # type: ignore
+            item = response.get_next()  # type: ignore
             if item not in result:
                 result.extend(item)
 
