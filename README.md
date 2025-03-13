@@ -130,7 +130,7 @@ uv run image_extractor_eval.py
 
 | Model | Date[^3] | Exact Match | Mismatch | Missing | Potential<br> Hallucination | Cost | Cost<br> factor |
 | --- | --- | :---: | :---: | :---: | :---: | ---: | ---: |
-| `openai/gpt-4o-mini` | Mar 2025 | 170 | 0 | 2 | 2[^6] | 0.0008 | 1.0 |
+| `openai/gpt-4o-mini` | Mar 2025 | 170 | 0 | 2 | 2 | 0.0008 | 1.0 |
 | `openai/gpt-4o` | Mar 2025 | 174 | 1 | 1 | 2 | $0.0277 | 35x |
 | `anthropic/claude-3.5-sonnet` | Mar 2025 | 173 | 0 | 2 | 2 | $0.0551 | 69x |
 | `google/gemini-2.0-flash` | Mar 2025 | 158 | 2 | 12 | 8 | Free tier | N/A |
