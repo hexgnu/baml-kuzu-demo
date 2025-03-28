@@ -47,6 +47,7 @@ rag = get_graph_rag()
 
 # App title
 st.title("Graph RAG with Kuzu")
+
 st.markdown("Ask questions about the data in your Kuzu database and get answers powered by RAG.")
 
 # Create two columns for the main interface

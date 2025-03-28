@@ -100,6 +100,31 @@ class BamlAsyncClient:
       )
       return cast(List[types.PatientInfo], raw.cast_to(types, types, partial_types, False))
     
+    async def QuestionAnswer(
+        self,
+        question: str,chunks: List[types.Chunk],
+        baml_options: BamlCallOptions = {},
+    ) -> types.Answer:
+      __tb__ = baml_options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb # type: ignore (we know how to use this private attribute)
+      else:
+        tb = None
+      __cr__ = baml_options.get("client_registry", None)
+      collector = baml_options.get("collector", None)
+      collectors = collector if isinstance(collector, list) else [collector] if collector is not None else []
+      raw = await self.__runtime.call_function(
+        "QuestionAnswer",
+        {
+          "question": question,"chunks": chunks,
+        },
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+        collectors,
+      )
+      return cast(types.Answer, raw.cast_to(types, types, partial_types, False))
+    
     async def RAGAnswerQuestion(
         self,
         question: str,context: str,
@@ -222,6 +247,39 @@ class BamlStreamClient:
         raw,
         lambda x: cast(List[partial_types.PatientInfo], x.cast_to(types, types, partial_types, True)),
         lambda x: cast(List[types.PatientInfo], x.cast_to(types, types, partial_types, False)),
+        self.__ctx_manager.get(),
+      )
+    
+    def QuestionAnswer(
+        self,
+        question: str,chunks: List[types.Chunk],
+        baml_options: BamlCallOptions = {},
+    ) -> baml_py.BamlStream[partial_types.Answer, types.Answer]:
+      __tb__ = baml_options.get("tb", None)
+      if __tb__ is not None:
+        tb = __tb__._tb # type: ignore (we know how to use this private attribute)
+      else:
+        tb = None
+      __cr__ = baml_options.get("client_registry", None)
+      collector = baml_options.get("collector", None)
+      collectors = collector if isinstance(collector, list) else [collector] if collector is not None else []
+      raw = self.__runtime.stream_function(
+        "QuestionAnswer",
+        {
+          "question": question,
+          "chunks": chunks,
+        },
+        None,
+        self.__ctx_manager.get(),
+        tb,
+        __cr__,
+        collectors,
+      )
+
+      return baml_py.BamlStream[partial_types.Answer, types.Answer](
+        raw,
+        lambda x: cast(partial_types.Answer, x.cast_to(types, types, partial_types, True)),
+        lambda x: cast(types.Answer, x.cast_to(types, types, partial_types, False)),
         self.__ctx_manager.get(),
       )
     

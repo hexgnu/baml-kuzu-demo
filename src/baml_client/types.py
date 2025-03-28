@@ -44,6 +44,10 @@ class Answer(BaseModel):
     question: str
     answer: str
 
+class Chunk(BaseModel):
+    document: str
+    distance: float
+
 class ConditionAndDrug(BaseModel):
     condition: str
     drug: List["Drug"]

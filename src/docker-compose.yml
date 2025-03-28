@@ -4,6 +4,32 @@ services:
     environment:
       - MODE=READ_ONLY
     ports:
-      - 8000:8000
+      - 8001:8000
     volumes:
-      - ./ex_kuzu_db:/database
+      - ./ex_kuzu_db:/database:Z
+
+  chroma:
+    image: ghcr.io/chroma-core/chroma:0.6.2
+    environment:
+      - IS_PERSISTENT=TRUE
+    volumes:
+      # Default configuration for persist_directory in chromadb/config.py
+      # Currently it's located in "/chroma/chroma/"
+      - ./chroma_db:/chroma/chroma:Z
+    ports:
+      - 8000:8000
+    networks:
+      - default
+
+  chroma-admin:
+    image: fengzhichao/chromadb-admin
+    ports:
+      - "8002:3000"
+    restart: always
+
+    networks:
+      - default
+
+        #   networks:
+        #     ring:
+        #       driver: bridge

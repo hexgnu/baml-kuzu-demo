@@ -6,11 +6,14 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "baml-py>=0.78.0",
+    "chromadb>=0.6.3",
     "kuzu>=0.8.2",
     "polars>=1.23.0",
     "pyarrow>=19.0.1",
     "pydantic>=2.10.6",
+    "pymupdf>=1.25.4",
     "python-dotenv>=1.0.1",
+    "sentence-transformers>=3.4.1",
     "streamlit>=1.42.2",
 ]
 [tool.pytest.ini_options]

@@ -38,6 +38,10 @@ class Answer(BaseModel):
     question: Optional[str] = None
     answer: Optional[str] = None
 
+class Chunk(BaseModel):
+    document: Optional[str] = None
+    distance: Optional[float] = None
+
 class ConditionAndDrug(BaseModel):
     condition: Optional[str] = None
     drug: List["Drug"]
